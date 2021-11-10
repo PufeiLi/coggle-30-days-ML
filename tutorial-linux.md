@@ -231,3 +231,83 @@ vim界面截图如下：
 
 ## 5. Task5:在目录下创建py文件，并进行运行
 
+任务要点：python的os和sys系统接口，文件接口
+
+学习资料：[学习python下os模块处理文件和目录的函数](https://www.runoob.com/python/os-file-methods.html)、[学习python下sys模块和传参函数](https://www.runoob.com/python3/python3-module.html)
+
+要求：在home/coggle目录下，在你英文昵称（中间不要有空格哦）的文件夹中，新建一个test5.py文件，改程序可以使用os、sys模块完成以下功能：
+
+```python
+#!/usr/bin/python3
+
+import os
+import sys
+功能1：打印命令行参数
+print('命令行参数如下：')
+for i in sys.argv:
+    print(i)
+功能2：使用os模块打印/usr/bin/路径下所有以m开头的文件。
+print("\n/usr/bin/目录下m开头的文件名为：")
+path = "/usr/bin/"
+for file in os.listdir(path):
+    if file[0] == 'm':
+        print(file)
+```
+
+## 6. Task6:在目录下创建py目录，并进行import导入
+
+任务要点：python代码模块化
+
+学习资料：[学习python模块化](https://www.runoob.com/python3/python3-module.html)
+
+要求：编写test6.py和affairs.py完成以下功能：
+
+- 功能1：affairs.py代码完成https://mirror.coggle.club/dataset/affairs.txt文件的读取，这里可以直接pd.read_csv('https://mirror.coggle.club/dataset/affairs.txt')来完成。这一部分建议写为函数。
+
+- 功能2：test6.py可以导入affairs.py代码
+
+- 功能3：test6.py可以进行命令行解析，输出[affairs.txt](https://mirror.coggle.club/dataset/affairs.txt)具体的第几行内容。
+
+其中affairs.py代码内容为：
+
+```python
+#!/usr/bin/env python3
+import os
+import pandas as pd
+
+def read_affair(rows):
+    df = pd.read_csv("https://mirror.coggle.club/dataset/affairs.txt")
+    print("第%d行的内容是："%(rows))
+    print(df.iloc[rows-1])
+    return df.iloc[rows-1]
+if __name__ == '__main__':
+    read_affair(10)
+```
+
+test6.py代码内容为：
+
+```python
+#!/usr/bin/env python
+import sys
+from affairs.affairs import read_affair
+
+for i in sys.argv[1:]:
+    try:
+        read_affair(int(i))
+    except:
+        print("参数不正确！")
+```
+
+在/home/coggle/lipfuei/目录下，执行`python3 test6.py 10`：
+
+```shell
+[coggle@i-7lo31rsr lipufei]$ python3 test6.py 10
+第10行的内容是：
+rate_marriage     5.0
+age              37.0
+yrs_married      23.0
+children          5.5
+religious         2.0
+affairs           1.0
+```
+
