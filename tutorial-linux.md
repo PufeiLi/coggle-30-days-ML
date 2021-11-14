@@ -311,3 +311,90 @@ religious         2.0
 affairs           1.0
 ```
 
+## 7. Task7:在Linux系统中后台运行应用程序，并打印日志
+
+任务要点：程序后台运行，进程管理
+
+- [ ] 步骤1：在/home/coggle目录下在你英文昵称（中间不要有空格哦）的文件夹中创建一个sleep.py文件，该文件需要完成以下功能：
+
+  - 程序一直运行
+
+  - 每10秒输出当前时间
+
+- [ ] 步骤2：学习 [&](https://blog.csdn.net/a736933735/article/details/89577557) 和 [nohup](http://ipcmen.com/jobs)后台执行的方法,[链接2](https://blog.csdn.net/davidhzq/article/details/102766881)
+
+- [ ] 步骤3：学习[tmux](https://zhuanlan.zhihu.com/p/98384704)的[使用](https://www.ruanyifeng.com/blog/2019/10/tmux.html)，将步骤1的程序进行后台运行，并将输出结果写入到txt文件。
+
+查看**PID**的详细信息，[Linux](http://lib.csdn.net/base/linux)在启动一个进程时，系统会在/proc下创建一个以PID命名的文件夹，在该文件夹下会有我们的进程的信息，其中包括一个名为exe的文件即记录了绝对路径，通过ll或ls –l命令即可查看。即`ll /proc/PID`，cwd符号链接的是进程运行目录；exe符号连接就是执行程序的绝对路径；cmdline就是程序运行时输入的命令行命令；environ记录了进程运行时的环境变量；fd目录下是进程打开或使用的文件的符号连接。
+
+`pgrep -l name`查看[指定进程](https://blog.csdn.net/qq_32534441/article/details/102787381)的PID，如`pgrep -l python`
+
+`fg+任务标识符`：将任务调到前台
+
+TMUX的最简单操作流程
+
+> 1. 新建会话`tmux new -s my_session`。
+> 2. 在 Tmux 窗口运行所需的程序。
+> 3. 按下快捷键`Ctrl+b d`将会话分离。
+> 4. 下次使用时，重新连接到会话`tmux attach-session -t my_session`。
+
+sleep.py文件内容为：
+
+  ```python
+  #!/usr/bin/env python3
+  import time
+  
+  while(1):
+      now_time = str(time.ctime())
+      print(now_time)
+      time.sleep(10)
+  ```
+
+```shell
+# 启动tmux
+$ tmux
+# 将脚本挂在后台
+$ nohup python3 sleep.py >logs.txt &
+[1] 1279264
+$ nohup: ignoring input and redirecting stderr to stdout
+# 分离会话，回到真窗口
+$ tmux detach
+
+$ tmux
+[detached (from session 0)]
+# 查看当前会话
+$ tmux ls
+0: 1 windows (created Sun Nov 14 22:54:17 2021)
+
+# 重接会话 使用伪窗口编号
+$ tmux attach -t 0
+# 查看任务列表及任务状态，包括后台运行的任务
+$ jobs -l
+[1]+ 1279264 Running                 nohup python3 sleep.py > logs.txt &
+# 将任务调到前台，终止任务
+$ fg 1
+nohup python3 sleep.py > logs.txt
+^C
+$ ls
+logs.txt  sleep.py
+# 查看重定向到txt文件的内容，是刚才运行的时间
+$ cat logs.txt 
+Sun Nov 14 22:54:45 2021
+Sun Nov 14 22:54:55 2021
+Sun Nov 14 22:55:05 2021
+Sun Nov 14 22:55:15 2021
+Sun Nov 14 22:55:25 2021
+Sun Nov 14 22:55:35 2021
+Sun Nov 14 22:55:45 2021
+Sun Nov 14 22:55:55 2021
+Sun Nov 14 22:56:05 2021
+Sun Nov 14 22:56:15 2021
+Sun Nov 14 22:56:25 2021
+Sun Nov 14 22:56:35 2021
+Traceback (most recent call last):
+  File "sleep.py", line 7, in <module>
+    time.sleep(10)
+KeyboardInterrupt
+
+```
+
