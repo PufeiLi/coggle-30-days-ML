@@ -39,4 +39,25 @@ d: tensor([[1., 1., 1.],
 
   - 使用pytroch定义w和b，并使用随机梯度下降，完成回归拟合。
 
-[见代码](./pytorch-tutorial/task2.py)。
+实现：[见代码](./pytorch-tutorial/task2.py)。
+
+## **任务3：PyTorch全连接层原理和使用**
+
+任务要点：全连接网络
+
+- 步骤1：学习全连接网络原理，https://blog.csdn.net/xiaodong_11/article/details/82015456
+
+- 步骤2：在pytorch中使用矩阵乘法实现全连接层
+
+- 步骤3：在pytorch中使用nn.Linear层
+
+实现代码：[代码](./pytorch-tutorial/task3.py)
+
+## **任务4：PyTorch激活函数原理和使用**
+
+任务要点：激活函数
+
+- 步骤1：学习激活函数的原理，https://zhuanlan.zhihu.com/p/88429934
+
+- 步骤2：在pytorch中手动实现上述激活函数
+
