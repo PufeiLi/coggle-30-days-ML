@@ -1,5 +1,7 @@
 # Coggle 30 Days of ML（21年11月）Linux基础使用
 
+学习视频：[视频1](https://bilibili.com/video/BV1yr4y1C7RC)、[视频2](https://bilibili.com/video/BV1Zr4y1F7sQ)、[视频3](https://bilibili.com/video/BV1S64y1v7UG)
+
 ## 1. Task1:使用命令行登录指定的Linux环境
 
 本机系统为Ubuntu 18.04.6 LTS，任务要点：ssh登录、密码输入、环境配置。
@@ -396,5 +398,169 @@ Traceback (most recent call last):
     time.sleep(10)
 KeyboardInterrupt
 
+```
+
+## 8. Task8:使用grep和awk从文件中筛选字符串
+
+任务要点：字符筛选
+
+- 步骤1：下载周杰伦歌词文本，并进行解压。https://mirror.coggle.club/dataset/jaychou_lyrics.txt.zip
+
+- 步骤2：利用grep命令完成以下操作，并输出到屏幕;[链接1](https://blog.csdn.net/baidu_41388533/article/details/107610827)、[链接2](https://www.runoob.com/linux/linux-comm-grep.html)
+
+  - 统计歌词中 包含【超人】的歌词
+
+  - 统计歌词中 包含【外婆】但不包含【期待】的歌词
+
+  - 统计歌词中 以【我】开头的歌词
+
+  - 统计歌词中 以【我】结尾的歌词
+
+- 步骤3：利用sed命令完成以下操作，并输出到屏幕；[链接1](https://www.cnblogs.com/JohnLiang/p/6202962.html)
+
+  - 将歌词中 第2行 至 第40行 删除
+
+  - 将歌词中 所有【我】替换成【你】
+
+```shell
+# 下载周杰伦歌词文本
+$ wget https://mirror.coggle.club/dataset/jaychou_lyrics.txt.zip
+--2021-11-15 14:28:25--  https://mirror.coggle.club/dataset/jaychou_lyrics.txt.zip
+Resolving mirror.coggle.club (mirror.coggle.club)... 113.229.252.249, 2408:872b:f01:1002:3::3fc
+Connecting to mirror.coggle.club (mirror.coggle.club)|113.229.252.249|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 52607 (51K) [application/zip]
+Saving to: ‘jaychou_lyrics.txt.zip’
+
+jaychou_lyrics.txt.zip            100%[=============================================================>]  51.37K  --.-KB/s    in 0.02s   
+
+2021-11-15 14:28:26 (2.02 MB/s) - ‘jaychou_lyrics.txt.zip’ saved [52607/52607]
+# 进行解压
+$ unzip jaychou_lyrics.txt.zip 
+Archive:  jaychou_lyrics.txt.zip
+  inflating: jaychou_lyrics.txt      
+$ ls
+jaychou_lyrics.txt  jaychou_lyrics.txt.zip
+# 统计歌词中 包含【超人】的歌词
+$ grep -c "超人" jaychou_lyrics.txt
+5
+$ grep -n "超人" jaychou_lyrics.txt
+5795:如果超人会飞 那就让我在空中停一停歇
+5798:不要问我哭过了没 因為超人不能流眼泪
+5815:只能说当超人真的好难
+5816:如果超人会飞 那就让我在空中停一停歇
+5819:不要问我哭过了没 因為超人不能流眼泪
+# 统计歌词中 包含【外婆】但不包含【期待】的歌词
+$ cat jaychou_lyrics.txt|grep -v "期待"|grep -c "外婆"
+14
+# 统计歌词中 以【我】开头的歌词
+$ grep -c "^我" jaychou_lyrics.txt
+768
+# 统计歌词中 以【我】结尾的歌词
+$ grep -c "我$" jaychou_lyrics.txt
+118
+# 将歌词中 第2行 至 第40行 删除
+$ sed '2,40d' jaychou_lyrics.txt
+# 将歌词中 所有【我】替换成【你】
+$ sed 's/我/你/g' jaychou_lyrics.txt
+
+```
+
+## 9. Task9:在目录下创建zip和tar压缩文件，并进行解压
+
+任务要点：[文件压缩](https://www.cnblogs.com/wxlf/p/8117602.html)
+
+- 步骤1：在/home/coggle目录下在你英文昵称（中间不要有空格哦）的文件夹中，下载https://mirror.coggle.club/dataset/jaychou_lyrics.txt.zip
+
+- 步骤2：使用zip 压缩/home/coggle目录下在你英文昵称（中间不要有空格哦）的文件夹
+
+- 步骤3：将 /home/coggle目录下在你英文昵称（中间不要有空格哦）的文件夹，打包为tar格式。
+
+- 步骤4：将 /home/coggle目录下在你英文昵称（中间不要有空格哦）的文件夹，打包为tar.gz格式。
+
+```shell
+$ pwd
+/home/coggle
+$ cd lipufei/
+$ ls
+jaychou_lyrics.txt	logs.txt   sleep.py
+jaychou_lyrics.txt.zip	nohup.out  task8
+# 使用zip 压缩
+$ zip lipufei.zip ./*
+  adding: jaychou_lyrics.txt (deflated 69%)
+  adding: jaychou_lyrics.txt.zip (stored 0%)
+  adding: logs.txt (deflated 61%)
+  adding: nohup.out (deflated 53%)
+  adding: sleep.py (deflated 19%)
+  adding: task8/ (stored 0%)
+$ ls
+jaychou_lyrics.txt	lipufei.zip  nohup.out	task8
+jaychou_lyrics.txt.zip	logs.txt     sleep.py
+$ tar czvf lipufei.tar ./*		# 打包为tar格式
+./jaychou_lyrics.txt
+./jaychou_lyrics.txt.zip
+./lipufei.zip
+./logs.txt
+./nohup.out
+./sleep.py
+./task8/
+./task8/jaychou_lyrics.txt.zip
+./task8/jaychou_lyrics.txt
+./task8/temp.txt
+$ ls
+jaychou_lyrics.txt	lipufei.tar  logs.txt	sleep.py
+jaychou_lyrics.txt.zip	lipufei.zip  nohup.out	task8
+$ tar czvf lipufei.tar.gz  ./*	# 打包为tar.gz格式
+./jaychou_lyrics.txt
+./jaychou_lyrics.txt.zip
+./lipufei.tar
+./lipufei.zip
+./logs.txt
+./nohup.out
+./sleep.py
+./task8/
+./task8/jaychou_lyrics.txt.zip
+./task8/jaychou_lyrics.txt
+./task8/temp.txt
+$ ls
+jaychou_lyrics.txt	lipufei.tar	lipufei.zip  nohup.out	task8
+jaychou_lyrics.txt.zip	lipufei.tar.gz	logs.txt     sleep.py
+```
+
+## 10. Task10:使用find和locate定位文件
+
+任务要点：文件搜索
+
+学习资料：[参考1](https://www.runoob.com/linux/linux-comm-find.html)、[参考2](https://www.cnblogs.com/linjiqin/p/11678012.html)、[参考3](https://www.runoob.com/linux/linux-comm-locate.html)
+
+- 步骤1：使用find统计文件系统中以py为后缀名的文件个数
+
+- 步骤2：使用find寻找/home/文件夹下文件内容包含coggle的文件
+
+- 步骤3：使用locate寻找到python3.preinst文件
+
+```shell
+$ cd /
+$ pwd
+/
+$ find . -name "*.py"|wc -l		# 使用find统计文件系统中以py为后缀名的文件个数
+find: ‘./snap/core18/2246/var/cache/ldconfig’: Permission denied
+find: ‘./snap/core18/2246/var/lib/private’: Permission denied
+find: ‘./snap/core18/1885/etc/ssl/private’: Permission denied
+find: ‘./snap/core18/1885/root’: Permission denied
+find: ‘./snap/core18/1885/var/cache/ldconfig’: Permission denied
+find: ‘./snap/core18/1885/var/lib/private’: Permission denied
+find: ‘./snap/core18/1885/var/lib/snapd/void’: Permission denied
+find: ‘./tmp/snap.lxd’: Permission denied
+find: ‘./tmp/systemd-private-3d33cdcd302144a4a28246fc85cf9711-systemd-resolved.service-xUMvug’: Permission denied
+find: ‘./tmp/systemd-private-3d33cdcd302144a4a28246fc85cf9711-systemd-logind.service-AOegJf’: Permission denied
+find: ‘./tmp/systemd-private-3d33cdcd302144a4a28246fc85cf9711-systemd-timesyncd.service-TpsCBi’: Permission denied
+11364
+# 使用find寻找/home/文件夹下文件内容包含coggle的文件
+$  grep -r "coggle" /home/	
+$ find /home/ -type f | xargs grep "coggle"
+# 用locate寻找到python3.preinst文件
+$ locate python3.preinst
+/var/lib/dpkg/info/python3.preinst
 ```
 
