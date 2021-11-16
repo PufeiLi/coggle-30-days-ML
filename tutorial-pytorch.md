@@ -61,3 +61,5 @@ d: tensor([[1., 1., 1.],
 
 - 步骤2：在pytorch中手动实现上述激活函数
 
+实现代码：[代码](./pytorch-tutorial/task4.py)
+
